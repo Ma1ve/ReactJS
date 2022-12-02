@@ -2,49 +2,58 @@ import React, { useRef, useState } from 'react';
 
 import './styles/App.css';
 
-import PostItem from './component/PostItem';
 import PostList from './component/PostList';
-import MyButton from './UI/button/MyButton';
-import MyInput from './UI/input/MyInput';
+import PostForm from './component/PostForm';
+import MySelect from './UI/select/MySelect';
 
 function App() {
   const [posts, setPosts] = useState([
-    { id: 1, title: 'JavaScript', body: 'Description' },
-    { id: 2, title: 'JavaScript', body: 'Description' },
-    { id: 3, title: 'JavaScript', body: 'Description' },
-    { id: 4, title: 'JavaScript', body: 'Description' },
+    { id: 1, title: 'a', body: 'b' },
+    { id: 2, title: 'b', body: 'a' },
+    { id: 3, title: 'f', body: 'd' },
+    { id: 4, title: 'dd', body: 'ff' },
   ]);
 
-  //   // const [title, setTitle] = useState('');
-  //   // const [body, setBody] = useState('');
-  const [post, setPost] = useState({ title: '', body: '' });
+  const [selectedSort, setSelectedSort] = useState();
 
-  const addNewPost = (e) => {
-    e.preventDefault();
+  const createPost = (newPost) => {
+    setPosts([...posts, newPost]);
+  };
 
-    setPosts([...posts, { ...post, id: Date.now() }]);
-    setPost({ title: '', body: '' });
+  const removePost = (post) => {
+    setPosts(posts.filter((p) => p.id !== post.id));
+  };
+
+  const sortSelect = (sort) => {
+    console.log(sort);
+    setSelectedSort(sort);
+    // setSelectedSort([...posts].sort((a, b) => a[sort].localeCompare(b[sort])));
   };
 
   return (
     <>
       <div className="App">
-        <form action="#">
-          <MyInput
-            value={post.title}
-            onChange={(e) => setPost({ ...post, title: e.target.value })}
-            type="text"
-            placeholder="Название поста"
+        <PostForm create={createPost} />
+
+        <hr style={{ margin: '15px 0' }} />
+
+        <div>
+          <MySelect
+            value={selectedSort}
+            onChange={sortSelect}
+            defaultValue="Сортировка"
+            options={[
+              { value: 'title', name: 'По названию' },
+              { value: 'body', name: 'По описанию' },
+            ]}
           />
-          <MyInput
-            value={post.body}
-            onChange={(e) => setPost({ ...post, body: e.target.value })}
-            type="text"
-            placeholder="Описание поста"
-          />
-          <MyButton onClick={addNewPost}>Создать пост</MyButton>
-        </form>
-        <PostList posts={posts} title="Посты про JS" />
+        </div>
+
+        {posts.length !== 0 ? (
+          <PostList remove={removePost} posts={posts} title="Посты про JS" />
+        ) : (
+          <h1 style={{ textAlign: 'center' }}>Посты не найдены!</h1>
+        )}
       </div>
     </>
   );
