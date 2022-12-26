@@ -23,4 +23,6 @@ const PostFilter = ({ filter, setFilter }) => {
   );
 };
 
+/* lorem */
+
 export default PostFilter;

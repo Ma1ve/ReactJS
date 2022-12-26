@@ -36,21 +36,6 @@ function Posts() {
     setPage(page + 1);
   });
 
-  /* useEffect(() => {
-    if (isPostLoading) return;
-    if (observer.current) observer.current.disconnect();
-    // функция обратного вызова
-    let callback = function (entries, observer) {
-      if (entries[0].isIntersecting && page < totalPages) {
-        setPage(page + 1);
-      }
-    };
-
-    // наблюдатель
-    observer.current = new IntersectionObserver(callback);
-    observer.current.observe(lastElement.current);
-  }, [isPostLoading]); */
-
   useEffect(() => {
     fetchPosts(limit, page);
   }, [page, limit]);
